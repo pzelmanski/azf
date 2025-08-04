@@ -1,7 +1,4 @@
 
-using System.Net.Http.Headers;
-
-
 public interface IJokesApi
 {
     public Task<string> GetRandomJoke();

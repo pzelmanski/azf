@@ -1,17 +1,16 @@
 
-using LanguageExt;
 using Microsoft.Data.Sqlite;
 
-public interface IDbAccess
+public interface IDbRepository
 {
-    public Task<bool> IsDuplicate(string joke);
-    public Task<Either<Unit, string>> TryInsertJoke(string joke);
     public Task<int> InitializeDbAsync();
+    public Task<bool> IsDuplicate(string joke);
+    public Task InsertJoke(string joke);
 }
 
-public class DbAccess : IDbAccess
-{
 
+public class DbRepository: IDbRepository
+{
     public async Task<int> InitializeDbAsync()
     {
         using var connection = new SqliteConnection(CONSTS._connectionString);
@@ -41,25 +40,12 @@ public class DbAccess : IDbAccess
         return result.HasRows;
     }
 
-    public async Task<Either<Unit, string>> TryInsertJoke(string joke)
+    public async Task InsertJoke(string joke)
     {
-        var isDuplicate = await IsDuplicate(joke);
-        if (isDuplicate)
-            return Either<Unit, string>.Right("Duplicate joke");
-        try
-        {
-            using var connection = new SqliteConnection(CONSTS._connectionString);
-            await connection.OpenAsync();
-            var c2 = connection.CreateCommand();
-            c2.CommandText = @$" insert into jokes (joke) values ('{joke}');";
-            var insertedCount = await c2.ExecuteNonQueryAsync();
-
-            return Either<Unit, string>.Left(Unit.Default);
-        }
-        catch (System.Exception e)
-        {
-            return Either<Unit, string>.Right(e.ToString());
-            throw;
-        }
+        using var connection = new SqliteConnection(CONSTS._connectionString);
+        await connection.OpenAsync();
+        var c2 = connection.CreateCommand();
+        c2.CommandText = @$" insert into jokes (joke) values ('{joke}');";
+        await c2.ExecuteNonQueryAsync();
     }
 }
