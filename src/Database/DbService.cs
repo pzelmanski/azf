@@ -2,12 +2,12 @@
 using LanguageExt;
 
 
-public interface IDbAccess
+public interface IDbService
 {
     public Task<Either<Unit, string>> TryInsertJokeAsync(string joke);
 }
 
-public class DbAccess(IDbRepository repo) : IDbAccess
+public class DbService(IDbRepository repo) : IDbService
 {
     private readonly IDbRepository repo = repo;
 

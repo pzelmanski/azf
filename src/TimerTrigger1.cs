@@ -5,17 +5,17 @@ using Microsoft.Data.Sqlite;
 namespace Company.Function;
 
 public class TimerTrigger1(
-    IDbAccess dbAccess,
+    IDbService dbService,
     IDbRepository dbRepository,
     IJokesApi jokesApi,
     ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<TimerTrigger1>();
-    private readonly IDbAccess dbAccess = dbAccess;
+    private readonly IDbService _dbService = dbService;
     private readonly IJokesApi jokesApi = jokesApi;
     private readonly IDbRepository dbRepository = dbRepository;
 
-    public async Task<int> RunJokesInsertAsync(IJokesApi api, IDbAccess db)
+    public async Task<int> RunJokesInsertAsync(IJokesApi api, IDbService db)
     {
         var insertedJokesCount = 0;
 
@@ -24,7 +24,7 @@ public class TimerTrigger1(
         for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < CONSTS.JokesToInsertCount * 2; circutBreaker++)
         {
             var joke = await jokesApi.GetRandomJoke();
-            var result = await dbAccess.TryInsertJokeAsync(joke);
+            var result = await _dbService.TryInsertJokeAsync(joke);
             result.Match(
                 e => _logger.LogInformation("could not insert joke because: {Error}", e),
                 ok =>
@@ -48,7 +48,7 @@ public class TimerTrigger1(
 
             await dbRepository.InitializeDbAsync();
 
-            var insertedJokesCount = await RunJokesInsertAsync(jokesApi, dbAccess);
+            var insertedJokesCount = await RunJokesInsertAsync(jokesApi, _dbService);
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
 

@@ -13,7 +13,7 @@ builder.Services
     .ConfigureFunctionsApplicationInsights()
     .AddHttpClient()
     .AddSingleton<IDbRepository, DbRepository>()
-    .AddSingleton<IDbAccess, DbAccess>()
+    .AddSingleton<IDbService, DbService>()
     .AddSingleton<IJokesApi, JokesApiMatchilling>();
 
 builder.Build().Run();
