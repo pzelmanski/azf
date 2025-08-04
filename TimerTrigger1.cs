@@ -4,21 +4,27 @@ using Microsoft.Data.Sqlite;
 
 namespace Company.Function;
 
-public class TimerTrigger1(ILoggerFactory loggerFactory)
+public class TimerTrigger1(
+    IDbAccess dbAccess,
+    IDbRepository dbRepository,
+    IJokesApi jokesApi,
+    ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<TimerTrigger1>();
+    private readonly IDbAccess dbAccess = dbAccess;
+    private readonly IJokesApi jokesApi = jokesApi;
+    private readonly IDbRepository dbRepository = dbRepository;
 
-
-    public async Task<int> RunJokesInsert(IJokesApi api, IDbAccess db)
+    public async Task<int> RunJokesInsertAsync(IJokesApi api, IDbAccess db)
     {
         var insertedJokesCount = 0;
-        
+
         // circuit breaker implemented just in case there are no jokes under 200 chars - to avoid infinite loop
         // and skyrocketing costs
-        for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount || circutBreaker < 10; circutBreaker++)
+        for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < 10; circutBreaker++)
         {
             var joke = await api.GetRandomJoke();
-            var result = await db.TryInsertJoke(joke);
+            var result = await db.TryInsertJokeAsync(joke);
             result.Match(
                 e => _logger.LogInformation("could not insert joke because: \n{Error}", e),
                 ok =>
@@ -38,13 +44,13 @@ public class TimerTrigger1(ILoggerFactory loggerFactory)
     {
         try
         {
-            await new DbRepository().InitializeDbAsync();
+            await dbRepository.InitializeDbAsync();
 
             _logger.LogInformation("C# Timer trigger function executed at: {executionTime}", DateTime.Now);
 
             // this could (possibly should?) be IoC via default .net services, but I dont feel like learning
             // how to implment it in azure functions - sorry guys its 11pm and I have to wake up in the morning
-            var insertedJokesCount = await RunJokesInsert(new JokesApiMatchilling(), new DbAccess(new DbRepository()));
+            var insertedJokesCount = await RunJokesInsertAsync(jokesApi, dbAccess);
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
 

@@ -10,6 +10,10 @@ builder.ConfigureFunctionsWebApplication();
 // TODO: Implement ioc
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
+    .ConfigureFunctionsApplicationInsights()
+    .AddHttpClient()
+    .AddSingleton<IDbRepository, DbRepository>()
+    .AddSingleton<IDbAccess, DbAccess>()
+    .AddSingleton<IJokesApi, JokesApiMatchilling>();
 
 builder.Build().Run();

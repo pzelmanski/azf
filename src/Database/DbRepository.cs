@@ -4,8 +4,8 @@ using Microsoft.Data.Sqlite;
 public interface IDbRepository
 {
     public Task<int> InitializeDbAsync();
-    public Task<bool> AlreadyExists(string joke);
-    public Task InsertJoke(string joke);
+    public Task<bool> AlreadyExistsAsync(string joke);
+    public Task InsertJokeAsync(string joke);
 }
 
 
@@ -31,7 +31,7 @@ public class DbRepository: IDbRepository
         return result;
     }
 
-    public async Task<bool> AlreadyExists(string joke)
+    public async Task<bool> AlreadyExistsAsync(string joke)
     {
         using var connection = new SqliteConnection(CONSTS._connectionString);
         await connection.OpenAsync();
@@ -43,7 +43,7 @@ public class DbRepository: IDbRepository
         return result.HasRows;
     }
 
-    public async Task InsertJoke(string joke)
+    public async Task InsertJokeAsync(string joke)
     {
         using var connection = new SqliteConnection(CONSTS._connectionString);
         await connection.OpenAsync();
