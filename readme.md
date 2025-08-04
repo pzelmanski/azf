@@ -1,4 +1,5 @@
 The Best of Chuck
+
 The goal for the exercise it to present coding style, compliance with SOLID principles as well as
 knowledge of commonly used libraries in .NET framework.
 In this task we want to collect resource from external provider.
@@ -32,3 +33,4 @@ For a `TimerTrigger` to work, you provide a schedule in the form of a [cron expr
 
 
 <TODO> Documentation
+
