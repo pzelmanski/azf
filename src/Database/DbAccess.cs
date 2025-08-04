@@ -13,9 +13,11 @@ public class DbAccess(IDbRepository repo) : IDbAccess
 
     public async Task<Either<Unit, string>> TryInsertJoke(string joke)
     {
+        if (joke.Length > CONSTS.MaxJokeLength)
+            return Either<Unit, string>.Right($"Joke exceeded limit of {CONSTS.MaxJokeLength} characters.");
         var isDuplicate = await repo.IsDuplicate(joke);
         if (isDuplicate)
-            return Either<Unit, string>.Right("Duplicate joke");
+            return Either<Unit, string>.Right("Duplicate joke.");
         try
         {
             await repo.InsertJoke(joke);
