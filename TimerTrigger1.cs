@@ -35,13 +35,13 @@ public class TimerTrigger1(ILoggerFactory loggerFactory)
     {
         try
         {
-            await new DbAccess().  InitializeDbAsync();
+            await new DbRepository().InitializeDbAsync();
 
             _logger.LogInformation("C# Timer trigger function executed at: {executionTime}", DateTime.Now);
 
             // this could (possibly should?) be IoC via default .net services, but I dont feel like learning
             // how to implment it in azure functions - sorry guys its 11pm and I have to wake up in the morning
-            var insertedJokesCount = await RunJokesInsert(new JokesApiMatchilling(), new DbAccess());
+            var insertedJokesCount = await RunJokesInsert(new JokesApiMatchilling(), new DbAccess(new DbRepository()));
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
 
