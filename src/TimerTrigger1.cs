@@ -48,8 +48,6 @@ public class TimerTrigger1(
 
             await dbRepository.InitializeDbAsync();
 
-            // this could (possibly should?) be IoC via default .net services, but I dont feel like learning
-            // how to implment it in azure functions - sorry guys its 11pm and I have to wake up in the morning
             var insertedJokesCount = await RunJokesInsertAsync(jokesApi, dbAccess);
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
