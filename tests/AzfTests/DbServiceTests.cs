@@ -1,5 +1,7 @@
 ﻿using LanguageExt;
+using LanguageExt.Common;
 using Moq;
+using FluentAssertions;
 
 namespace AzfTests;
 
@@ -8,8 +10,9 @@ public class DbServiceTests
     // What I would also do in prod application is to 
     // write "unit-integration" tests with docker DB and
     // TestContainers, but they are too much effort to implement
-    // them here. I would possibly replace all this tests below
-    // with the ones using docker db
+    // them in this exercise. I would possibly replace all this tests below
+    // with the ones using docker db (and aim to create a nice API to be easily
+    // able to implement more tests with db)
     
     [Fact]
     public async Task GivenJokeOver200chars_ItShouldReturnError()
@@ -35,9 +38,8 @@ public class DbServiceTests
         var sut = new DbService(repoMock.Object);
         
         var result = await sut.TryInsertJokeAsync("already exists");
-        result.Match(
-            r => Unit.Default,
-            l => throw new Exception("Expected error, got OK"));
+        result.IsRight.Should().BeTrue("Expected error, got OK");
+
     }
     
     [Fact]

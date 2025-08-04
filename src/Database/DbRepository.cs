@@ -9,6 +9,7 @@ public interface IDbRepository
 }
 
 
+// TODO: Case for improvement: use dapper instead of pure connections
 public class DbRepository: IDbRepository
 {
     public async Task<int> InitializeDbAsync()

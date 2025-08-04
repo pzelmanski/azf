@@ -18,6 +18,13 @@ contain any duplicated quotes.
 
 ---
 
+In order to run it locally:
+- `npm i -g azurite`
+- `azurite`
+- run from vscode (attach debugger + run function from extension)
+
+---
+
 
 # TimerTrigger - C<span>#</span>
 

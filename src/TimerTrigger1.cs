@@ -46,6 +46,7 @@ public class TimerTrigger1(
         {
             _logger.LogInformation("C# Timer trigger function executed at: {executionTime}", DateTime.Now);
 
+            // TODO: It would probably be better to hide DB init inside DbService in order not to leak DbRepository into top level function
             await dbRepository.InitializeDbAsync();
 
             var insertedJokesCount = await RunJokesInsertAsync();
