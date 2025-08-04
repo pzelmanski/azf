@@ -19,6 +19,8 @@ public class TimerTrigger1(
 
         // circuit breaker implemented just in case there are no jokes under 200 chars - to avoid infinite loop
         // and skyrocketing costs
+
+        // TODO: Add test for jokes count && circuit breaker - possibly move this function into separate class
         for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < CONSTS.JokesToInsertCount * 2; circutBreaker++)
         {
             var joke = await jokesService.GetJokeAsync();
