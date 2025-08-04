@@ -26,7 +26,7 @@ public class TimerTrigger1(
             var joke = await api.GetRandomJoke();
             var result = await db.TryInsertJokeAsync(joke);
             result.Match(
-                e => _logger.LogInformation("could not insert joke because: \n{Error}", e),
+                e => _logger.LogInformation("could not insert joke because: {Error}", e),
                 ok =>
                 {
                     _logger.LogInformation("Inserted joke: {Joke}", joke);
