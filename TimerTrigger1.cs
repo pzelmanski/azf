@@ -8,10 +8,11 @@ public class TimerTrigger1(ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<TimerTrigger1>();
 
+
     public async Task<int> RunJokesInsert(IJokesApi api, IDbAccess db)
     {
         var insertedJokesCount = 0;
-        for (var i = 0; i < CONSTS.JokesToInsertCount;)
+        for (;insertedJokesCount < CONSTS.JokesToInsertCount;)
         {
             var joke = await api.GetRandomJoke();
             var result = await db.TryInsertJoke(joke);
@@ -34,13 +35,13 @@ public class TimerTrigger1(ILoggerFactory loggerFactory)
     {
         try
         {
-            await new DbRepository().InitializeDbAsync();
+            await new DbAccess().  InitializeDbAsync();
 
             _logger.LogInformation("C# Timer trigger function executed at: {executionTime}", DateTime.Now);
 
             // this could (possibly should?) be IoC via default .net services, but I dont feel like learning
             // how to implment it in azure functions - sorry guys its 11pm and I have to wake up in the morning
-            var insertedJokesCount = await RunJokesInsert(new JokesApiMatchilling(), new DbAccess(new DbRepository()));
+            var insertedJokesCount = await RunJokesInsert(new JokesApiMatchilling(), new DbAccess());
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
 
