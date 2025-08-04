@@ -4,6 +4,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azf", "src/azf.csproj", "{4C2F6910-761D-A105-CDD5-E416EF16EF24}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzfTests", "tests\AzfTests\AzfTests.csproj", "{1B8FA1FE-4B26-48DC-B0F8-D35C0EAE78B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{4C2F6910-761D-A105-CDD5-E416EF16EF24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2F6910-761D-A105-CDD5-E416EF16EF24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C2F6910-761D-A105-CDD5-E416EF16EF24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8FA1FE-4B26-48DC-B0F8-D35C0EAE78B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8FA1FE-4B26-48DC-B0F8-D35C0EAE78B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8FA1FE-4B26-48DC-B0F8-D35C0EAE78B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8FA1FE-4B26-48DC-B0F8-D35C0EAE78B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

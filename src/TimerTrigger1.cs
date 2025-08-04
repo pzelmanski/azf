@@ -21,10 +21,10 @@ public class TimerTrigger1(
 
         // circuit breaker implemented just in case there are no jokes under 200 chars - to avoid infinite loop
         // and skyrocketing costs
-        for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < 10; circutBreaker++)
+        for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < CONSTS.JokesToInsertCount * 2; circutBreaker++)
         {
-            var joke = await api.GetRandomJoke();
-            var result = await db.TryInsertJokeAsync(joke);
+            var joke = await jokesApi.GetRandomJoke();
+            var result = await dbAccess.TryInsertJokeAsync(joke);
             result.Match(
                 e => _logger.LogInformation("could not insert joke because: {Error}", e),
                 ok =>
@@ -44,9 +44,9 @@ public class TimerTrigger1(
     {
         try
         {
-            await dbRepository.InitializeDbAsync();
-
             _logger.LogInformation("C# Timer trigger function executed at: {executionTime}", DateTime.Now);
+
+            await dbRepository.InitializeDbAsync();
 
             // this could (possibly should?) be IoC via default .net services, but I dont feel like learning
             // how to implment it in azure functions - sorry guys its 11pm and I have to wake up in the morning

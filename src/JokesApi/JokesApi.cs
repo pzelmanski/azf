@@ -20,9 +20,15 @@ Api response:
 
 public class JokesApiMatchilling : IJokesApi
 {
+    private readonly HttpClient client;
+
+    public JokesApiMatchilling(HttpClient client)
+    {
+        this.client = client;
+    }
+
     public async Task<string> GetRandomJoke()
     {
-        var client = new HttpClient();
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
@@ -34,13 +40,13 @@ public class JokesApiMatchilling : IJokesApi
                 { "accept", "application/json" },
             },
         };
+
         using var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadAsStringAsync();
+        // TODO: Deserialize, grab only value from response
         Console.WriteLine(body);
 
         return body;
     }
 }
-
-
