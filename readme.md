@@ -6,9 +6,7 @@ In this task we want to collect resource from external provider.
 
 Requirements:
 1. Collect data and store it in SQLite.
-2. Implement time triggered Azure function which will be triggered every configurable X
-
-minutes and pull X jokes from external service: https://rapidapi.com/matchilling/api/chuck-
+2. Implement time triggered Azure function which will be triggered every configurable X minutes and pull X jokes from external service: https://rapidapi.com/matchilling/api/chuck-
 norris/
 
 3. Function should filter out jokes that have more than 200 characters. Database should not
@@ -33,4 +31,5 @@ For a `TimerTrigger` to work, you provide a schedule in the form of a [cron expr
 
 
 <TODO> Documentation
+
 
