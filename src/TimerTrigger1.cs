@@ -1,3 +1,4 @@
+using Company.Function.JokesApi;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Data.Sqlite;
@@ -7,15 +8,12 @@ namespace Company.Function;
 public class TimerTrigger1(
     IDbService dbService,
     IDbRepository dbRepository,
-    IJokesApi jokesApi,
+    IJokesService jokesService,
     ILoggerFactory loggerFactory)
 {
     private readonly ILogger _logger = loggerFactory.CreateLogger<TimerTrigger1>();
-    private readonly IDbService _dbService = dbService;
-    private readonly IJokesApi jokesApi = jokesApi;
-    private readonly IDbRepository dbRepository = dbRepository;
 
-    public async Task<int> RunJokesInsertAsync(IJokesApi api, IDbService db)
+    public async Task<int> RunJokesInsertAsync()
     {
         var insertedJokesCount = 0;
 
@@ -23,8 +21,8 @@ public class TimerTrigger1(
         // and skyrocketing costs
         for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount && circutBreaker < CONSTS.JokesToInsertCount * 2; circutBreaker++)
         {
-            var joke = await jokesApi.GetRandomJoke();
-            var result = await _dbService.TryInsertJokeAsync(joke);
+            var joke = await jokesService.GetJokeAsync();
+            var result = await dbService.TryInsertJokeAsync(joke);
             result.Match(
                 e => _logger.LogInformation("could not insert joke because: {Error}", e),
                 ok =>
@@ -40,7 +38,7 @@ public class TimerTrigger1(
     // if it would be an issue, we could store timestamp of last successful run in db and fetch more jokes
     // in case job failed on previos run
     [Function("TimerTrigger1")]
-    public async Task Run([TimerTrigger($"0 */5 * * * *")] TimerInfo myTimer)
+    public async Task Run([TimerTrigger($"0 */1 * * * *")] TimerInfo myTimer)
     {
         try
         {
@@ -48,7 +46,7 @@ public class TimerTrigger1(
 
             await dbRepository.InitializeDbAsync();
 
-            var insertedJokesCount = await RunJokesInsertAsync(jokesApi, _dbService);
+            var insertedJokesCount = await RunJokesInsertAsync();
 
             _logger.LogInformation("Inserted {InsertedCount} jokes", insertedJokesCount);
 

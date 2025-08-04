@@ -37,7 +37,7 @@ public class DbRepository: IDbRepository
         await connection.OpenAsync();
         var command = connection.CreateCommand();
         command.CommandText = "select joke from jokes j where j.joke = @joke";
-        command.Parameters.Add(joke);
+        command.Parameters.Add(new SqliteParameter("@joke", joke));
 
         var result = await command.ExecuteReaderAsync();
         return result.HasRows;

@@ -1,3 +1,4 @@
+using Company.Function.JokesApi;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ builder.Services
     .AddHttpClient()
     .AddSingleton<IDbRepository, DbRepository>()
     .AddSingleton<IDbService, DbService>()
-    .AddSingleton<IJokesApi, JokesApiMatchilling>();
+    .AddSingleton<IJokesApi, JokesApiMatchilling>()
+    .AddSingleton<IJokesService, JokesService>();
 
 builder.Build().Run();

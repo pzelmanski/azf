@@ -1,33 +1,12 @@
 
 public interface IJokesApi
 {
-    public Task<string> GetRandomJoke();
+    public Task<string> GetRandomJokeAsync();
 }
 
-/*
-Api response:
-
+public class JokesApiMatchilling(HttpClient client) : IJokesApi
 {
-    "categories":[],
-    "created_at":"2020-01-05 13:42:30.177068",
-    "icon_url":"https://api.chucknorris.io/img/avatar/chuck-norris.png",
-    "id":"wqw0wSquQPqPwRuKQiAPbA",
-    "updated_at":"2020-01-05 13:42:30.177068",
-    "url":"https://api.chucknorris.io/jokes/wqw0wSquQPqPwRuKQiAPbA",
-    "value":"Chuck Norris told the united states that russia was goin to nuc them during the cold war"
-}
-*/
-
-public class JokesApiMatchilling : IJokesApi
-{
-    private readonly HttpClient client;
-
-    public JokesApiMatchilling(HttpClient client)
-    {
-        this.client = client;
-    }
-
-    public async Task<string> GetRandomJoke()
+    public async Task<string> GetRandomJokeAsync()
     {
         var request = new HttpRequestMessage
         {
@@ -44,8 +23,6 @@ public class JokesApiMatchilling : IJokesApi
         using var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadAsStringAsync();
-        // TODO: Deserialize, grab only value from response
-        Console.WriteLine(body);
 
         return body;
     }
