@@ -14,6 +14,8 @@ public class JokesApiMatchilling(HttpClient client) : IJokesApi
             RequestUri = new Uri("https://matchilling-chuck-norris-jokes-v1.p.rapidapi.com/jokes/random"),
             Headers =
             {
+                // Secrets ideally should be stored in some cluster where app is deployed and fetched from there on runtime
+                // If possible they should not be committed into the repo
                 { "x-rapidapi-key", "45d96b2378mshbe1b6c7ccca44efp1c6487jsne3b81d5a951e" },
                 { "x-rapidapi-host", "matchilling-chuck-norris-jokes-v1.p.rapidapi.com" },
                 { "accept", "application/json" },
