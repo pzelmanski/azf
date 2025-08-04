@@ -4,6 +4,20 @@ public interface IJokesApi
     public Task<string> GetRandomJoke();
 }
 
+/*
+Api response:
+
+{
+    "categories":[],
+    "created_at":"2020-01-05 13:42:30.177068",
+    "icon_url":"https://api.chucknorris.io/img/avatar/chuck-norris.png",
+    "id":"wqw0wSquQPqPwRuKQiAPbA",
+    "updated_at":"2020-01-05 13:42:30.177068",
+    "url":"https://api.chucknorris.io/jokes/wqw0wSquQPqPwRuKQiAPbA",
+    "value":"Chuck Norris told the united states that russia was goin to nuc them during the cold war"
+}
+*/
+
 public class JokesApiMatchilling : IJokesApi
 {
     public async Task<string> GetRandomJoke()

@@ -12,7 +12,9 @@ public class TimerTrigger1(ILoggerFactory loggerFactory)
     public async Task<int> RunJokesInsert(IJokesApi api, IDbAccess db)
     {
         var insertedJokesCount = 0;
-        for (;insertedJokesCount < CONSTS.JokesToInsertCount;)
+        // circuit breaker implemented just in case there are no jokes under 200 chars - to avoid infinite loop
+        // and skyrocketing costs
+        for (var circutBreaker = 0; insertedJokesCount < CONSTS.JokesToInsertCount || circutBreaker < 10; circutBreaker++)
         {
             var joke = await api.GetRandomJoke();
             var result = await db.TryInsertJoke(joke);
