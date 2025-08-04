@@ -19,6 +19,9 @@ public class DbRepository: IDbRepository
         var command = connection.CreateCommand();
         // Assumption: I dont need to store any IDs, I'm only interested in storing jokes
         // Assumption: Performance is not an issue, I'm adding unique constraint onto text field in db for additional safety
+
+        // In case performance would be an issue, I could add hash of joke - in case of hash already existing I could compare if
+        // its the same joke or just accidental hash collission
         command.CommandText = @"
             CREATE TABLE IF NOT EXISTS jokes (
                 joke text unique not null
