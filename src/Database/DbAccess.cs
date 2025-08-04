@@ -15,9 +15,12 @@ public class DbAccess(IDbRepository repo) : IDbAccess
     {
         if (joke.Length > CONSTS.MaxJokeLength)
             return Either<Unit, string>.Right($"Joke exceeded limit of {CONSTS.MaxJokeLength} characters.");
-        var isDuplicate = await repo.IsDuplicate(joke);
+
+        // Assumption: there's only one thread & one instance running at the time and there's no race condition possible.
+        // In case its not true, I would join exist check & insert into single command / db transaction
+        var isDuplicate = await repo.AlreadyExists(joke);
         if (isDuplicate)
-            return Either<Unit, string>.Right("Duplicate joke.");
+            return Either<Unit, string>.Right("Joke already exists.");
         try
         {
             await repo.InsertJoke(joke);
